@@ -6,10 +6,8 @@ import org.example.service.ChallengeService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import java.util.List;
 @ApplicationScoped
 @Path("/challenges")
@@ -25,7 +23,11 @@ public class ChallengeController {
     public String getUser(){
         return giteaService.getById("token 0673f011ed89245efaa3eb76071654183106bc35");
     }
-
+    @POST
+    @Path("/user/repos")
+    public String createRepo(String json){
+        return giteaService.createRepo("token 0673f011ed89245efaa3eb76071654183106bc35", json);
+    }
     @GET
     public List<Challenge> getAll() {
         return challengeService.findAll();
@@ -50,6 +52,20 @@ public class ChallengeController {
     @POST
     public List<Challenge> add(Challenge challenge) {
         challengeService.add(challenge);
+        String json ="{"
+                + "\"auto_init\": true,"
+                + "\"default_branch\": \"string\","
+                + "\"description\": \"string\","
+                + "\"gitignores\": \"\","
+                + "\"issue_labels\": \"Default\","
+                + "\"license\": \"\","
+                + "\"name\": \"string3\","
+                + "\"private\": true,"
+                + "\"readme\": \"Default\","
+                + "\"template\": true,"
+                + "\"trust_model\": \"default\""
+                + "}";
+        giteaService.createRepo("token 0673f011ed89245efaa3eb76071654183106bc35", json);
         return getAll();
     }
 
