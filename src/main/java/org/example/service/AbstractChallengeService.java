@@ -67,13 +67,12 @@ public abstract class AbstractChallengeService {
         tempValues.put(":" + gsiPk.toLowerCase(), AttributeValue.builder().s("CHALLENGE#".concat(type)).build());
         tempValues.put(":" + gsiSk.toLowerCase(), AttributeValue.builder().s("CHALLENGE#".concat(type).concat("#" + attribute.toUpperCase())).build());
 
-        QueryRequest queryRequest = QueryRequest.builder()
+        return QueryRequest.builder()
                 .tableName(getTableName())
                 .indexName(gsiPk.toUpperCase() + "_" + gsiSk.toUpperCase())
                 .keyConditionExpression(gsiPk.toUpperCase() + "= :" + gsiPk.toLowerCase() + " and " + gsiSk.toUpperCase() + "= :" + gsiSk.toLowerCase())
                 .expressionAttributeValues(tempValues)
                 .build();
-        return queryRequest;
     }
 
 }
