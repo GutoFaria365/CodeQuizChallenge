@@ -1,6 +1,5 @@
 package org.example.service;
 
-import io.vertx.core.http.impl.CookieJar;
 import org.example.model.Challenge;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
@@ -19,7 +18,7 @@ public class ChallengeService extends AbstractChallengeService {
     @Inject
     DynamoDbClient dynamoDb;
 
-    private List<Challenge> findAll() {
+    public List<Challenge> findAll() {
         return dynamoDb.scanPaginator(scanRequest()).items().stream()
                 .map(Challenge::from)
                 .collect(Collectors.toList());
