@@ -22,6 +22,10 @@ public class ChallengeService extends AbstractChallengeService {
 
     ChallengeMapper challengeMapper;
 
+    public ChallengeService(ChallengeMapper challengeMapper) {
+        this.challengeMapper = challengeMapper;
+    }
+
     public List<ChallengeDto> findAll() {
         List<Challenge> challenges = dynamoDb.scanPaginator(scanRequest()).items().stream()
                 .map(Challenge::from)

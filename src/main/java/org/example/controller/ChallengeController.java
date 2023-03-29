@@ -49,9 +49,9 @@ public class ChallengeController {
     public List<ChallengeDto> getByCreator(@PathParam("creator") String creator) { return challengeService.getByCreator(creator); }
 
     @POST
-    public List<ChallengeDto> add(ChallengeDto challengeDto) {
+    public ChallengeDto add(ChallengeDto challengeDto) {
         challengeService.add(challengeDto);
-        return getAll();
+        return challengeDto;
     }
 
 }
