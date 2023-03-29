@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.example.dto.ChallengeDto;
 import org.example.model.Challenge;
 import org.example.service.ChallengeService;
 import org.example.service.GiteaService;
@@ -27,29 +28,29 @@ public class ChallengeController {
 //    }
 
     @GET
-    public List<Challenge> getAll() {
+    public List<ChallengeDto> getAll() {
         return challengeService.findAll();
     }
 
     @GET
     @Path("name/{name}")
-    public Challenge getByName(@PathParam("name") String name) { return challengeService.getByName(name); }
+    public ChallengeDto getByName(@PathParam("name") String name) { return challengeService.getByName(name); }
 
     @GET
     @Path("language/{language}")
-    public List<Challenge> getByLanguage(@PathParam("language") String language) { return challengeService.getByLanguage(language); }
+    public List<ChallengeDto> getByLanguage(@PathParam("language") String language) { return challengeService.getByLanguage(language); }
 
     @GET
     @Path("difficulty/{difficulty}")
-    public List<Challenge> getByDifficulty(@PathParam("difficulty") String difficulty) { return challengeService.getByDifficulty(difficulty); }
+    public List<ChallengeDto> getByDifficulty(@PathParam("difficulty") String difficulty) { return challengeService.getByDifficulty(difficulty); }
 
     @GET
     @Path("creator/{creator}")
-    public List<Challenge> getByCreator(@PathParam("creator") String creator) { return challengeService.getByCreator(creator); }
+    public List<ChallengeDto> getByCreator(@PathParam("creator") String creator) { return challengeService.getByCreator(creator); }
 
     @POST
-    public List<Challenge> add(Challenge challenge) {
-        challengeService.add(challenge);
+    public List<ChallengeDto> add(ChallengeDto challengeDto) {
+        challengeService.add(challengeDto);
         return getAll();
     }
 
