@@ -65,14 +65,15 @@ public abstract class AbstractChallengeService {
     public QueryRequest getQueryRequest(String attribute, String type, String gsiPk, String gsiSk) {
         Map<String, AttributeValue> tempValues = new HashMap<>();
         tempValues.put(":" + gsiPk.toLowerCase(), AttributeValue.builder().s("CHALLENGE#".concat(type)).build());
-        tempValues.put(":" + gsiSk.toLowerCase(), AttributeValue.builder().s("CHALLENGE#".concat(type).concat(attribute.toUpperCase())).build());
+        tempValues.put(":" + gsiSk.toLowerCase(), AttributeValue.builder().s("CHALLENGE#".concat(type).concat("#" + attribute.toUpperCase())).build());
 
-        return QueryRequest.builder()
+        QueryRequest queryRequest = QueryRequest.builder()
                 .tableName(getTableName())
                 .indexName(gsiPk.toUpperCase() + "_" + gsiSk.toUpperCase())
                 .keyConditionExpression(gsiPk.toUpperCase() + "= :" + gsiPk.toLowerCase() + " and " + gsiSk.toUpperCase() + "= :" + gsiSk.toLowerCase())
                 .expressionAttributeValues(tempValues)
                 .build();
+        return queryRequest;
     }
 
 }
