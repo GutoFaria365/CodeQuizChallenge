@@ -40,12 +40,12 @@ public abstract class AbstractChallengeService {
         item.put(C_DIFFICULTY, AttributeValue.builder().s(challenge.getDifficulty()).build());
         item.put(C_CREATED_BY, AttributeValue.builder().s(challenge.getCreatedBy()).build());
         item.put(C_CREATED_AT, AttributeValue.builder().s(challenge.getCreatedAt()).build());
-        item.put("GSI1PK", AttributeValue.builder().s("CHALLENGE#LANGUAGE#").build());
+        item.put("GSI1PK", AttributeValue.builder().s("CHALLENGE#LANGUAGE").build());
         item.put("GSI1SK", AttributeValue.builder().s("CHALLENGE#LANGUAGE#" + challenge.getLanguage().toUpperCase()).build());
-        item.put("GSI2PK", AttributeValue.builder().s("CHALLENGE#DIFFICULTY#").build());
+        item.put("GSI2PK", AttributeValue.builder().s("CHALLENGE#DIFFICULTY").build());
         item.put("GSI2SK", AttributeValue.builder().s("CHALLENGE#DIFFICULTY#" + challenge.getDifficulty().toUpperCase()).build());
         item.put("GSI3PK", AttributeValue.builder().s("CHALLENGE#CREATOR").build());
-        item.put("GSI3SK", AttributeValue.builder().s("CHALLENGE#CREATOR" + challenge.getCreatedBy().toUpperCase()).build());
+        item.put("GSI3SK", AttributeValue.builder().s("CHALLENGE#CREATOR#" + challenge.getCreatedBy().toUpperCase()).build());
         return PutItemRequest.builder()
                 .tableName(getTableName())
                 .item(item)
@@ -62,16 +62,16 @@ public abstract class AbstractChallengeService {
                 .expressionAttributeValues(expressionAttributeValues)
                 .build();
     }
-    public QueryRequest getRequest(String attribute, String type, String gsiPk, String gsiSk) {
-        Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
-        expressionAttributeValues.put(gsiPk.toLowerCase(), AttributeValue.builder().s("CHALLENGE#".concat(type)).build());
-        expressionAttributeValues.put(gsiSk.toLowerCase(), AttributeValue.builder().s("CHALLENGE#".concat(type).concat(attribute.toUpperCase())).build());
+    public QueryRequest getQueryRequest(String attribute, String type, String gsiPk, String gsiSk) {
+        Map<String, AttributeValue> tempValues = new HashMap<>();
+        tempValues.put(":" + gsiPk.toLowerCase(), AttributeValue.builder().s("CHALLENGE#".concat(type)).build());
+        tempValues.put(":" + gsiSk.toLowerCase(), AttributeValue.builder().s("CHALLENGE#".concat(type).concat(attribute.toUpperCase())).build());
 
         return QueryRequest.builder()
                 .tableName(getTableName())
                 .indexName(gsiPk.toUpperCase() + "_" + gsiSk.toUpperCase())
                 .keyConditionExpression(gsiPk.toUpperCase() + "= :" + gsiPk.toLowerCase() + " and " + gsiSk.toUpperCase() + "= :" + gsiSk.toLowerCase())
-                .expressionAttributeValues(expressionAttributeValues)
+                .expressionAttributeValues(tempValues)
                 .build();
     }
 
