@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.controller;
 
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 

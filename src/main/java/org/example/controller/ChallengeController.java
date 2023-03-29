@@ -3,28 +3,28 @@ package org.example.controller;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.example.model.Challenge;
 import org.example.service.ChallengeService;
-import org.example.service.GiteaService;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import java.util.List;
-
+@ApplicationScoped
 @Path("/challenges")
 public class ChallengeController {
 
     @Inject
     ChallengeService challengeService;
-//    @RestClient
-//    GiteaService giteaService;
+    @RestClient
+    GiteaService giteaService;
 
-//    @GET
-//    @Path("/user")
-//    public String getUser(){
-//        return giteaService.getById("token 0673f011ed89245efaa3eb76071654183106bc35");
-//    }
+    @GET
+    @Path("/user")
+    public String getUser(){
+        return giteaService.getById("token 0673f011ed89245efaa3eb76071654183106bc35");
+    }
 
     @GET
     public List<Challenge> getAll() {
