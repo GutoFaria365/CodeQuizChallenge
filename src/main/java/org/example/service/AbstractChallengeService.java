@@ -62,7 +62,7 @@ public abstract class AbstractChallengeService {
                 .expressionAttributeValues(expressionAttributeValues)
                 .build();
     }
-    public QueryRequest getRequest(String attribute, String type, String gsiPk, String gsiSk) {
+    public QueryRequest getQueryRequest(String attribute, String type, String gsiPk, String gsiSk) {
         Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
         expressionAttributeValues.put(gsiPk.toLowerCase(), AttributeValue.builder().s("CHALLENGE#".concat(type)).build());
         expressionAttributeValues.put(gsiSk.toLowerCase(), AttributeValue.builder().s("CHALLENGE#".concat(type).concat(attribute.toUpperCase())).build());
