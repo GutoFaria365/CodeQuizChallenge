@@ -17,14 +17,14 @@ public class ChallengeController {
 
     @Inject
     ChallengeService challengeService;
-    @RestClient
-    GiteaService giteaService;
+//    @RestClient
+//    GiteaService giteaService;
 
-    @GET
-    @Path("/user")
-    public String getUser(){
-        return giteaService.getById("token 0673f011ed89245efaa3eb76071654183106bc35");
-    }
+//    @GET
+//    @Path("/user")
+//    public String getUser(){
+//        return giteaService.getById("token 0673f011ed89245efaa3eb76071654183106bc35");
+//    }
 
     @GET
     public List<Challenge> getAll() {
