@@ -35,7 +35,9 @@ public abstract class AbstractChallengeService {
 
     protected ScanRequest scanRequest() {
         return ScanRequest.builder().tableName(getTableName())
-                .attributesToGet(C_NAME, C_DESCRIPTION, C_LANGUAGE, C_DIFFICULTY, C_CREATED_BY, C_CREATED_AT).build();
+                .attributesToGet(PK, SK, C_NAME, C_DESCRIPTION, C_LANGUAGE, C_DIFFICULTY, C_CREATED_BY,
+                        C_CREATED_AT, C_REPOSITORY, C_CLONE_REP, C_OTHER_INFO, GSI1PK, GSI1SK, GSI2PK, GSI2SK,
+                        GSI3PK, GSI3SK).build();
     }
 
     protected PutItemRequest putRequest(Challenge challenge) {

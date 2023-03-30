@@ -64,8 +64,7 @@ public class ChallengeController {
 
     @POST
     public ChallengeDto add(ChallengeDto challengeDto) {
-
-        challengeService.add(challengeDto);
+        challengeDto = challengeService.add(challengeDto);
         return challengeDto;
     }
 
