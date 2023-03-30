@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.controller.GiteaService;
 import org.example.model.Challenge;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
@@ -18,6 +19,9 @@ public class ChallengeService extends AbstractChallengeService {
     @Inject
     DynamoDbClient dynamoDb;
 
+    @Inject
+    GiteaService giteaService;
+
     public List<Challenge> findAll() {
         return dynamoDb.scanPaginator(scanRequest()).items().stream()
                 .map(Challenge::from)
@@ -25,6 +29,21 @@ public class ChallengeService extends AbstractChallengeService {
     }
 
     public Challenge add(Challenge challenge) {
+        String json ="{"
+                + "\"auto_init\": true,"
+                + "\"default_branch\": \"string\","
+                + "\"description\": \"" + challenge.getDescription() + "\","
+                + "\"gitignores\": \"\","
+                + "\"issue_labels\": \"Default\","
+                + "\"license\": \"\","
+                + "\"name\": \"" + challenge.getName() + "\","
+                + "\"private\": true,"
+                + "\"readme\": \"Default\","
+                + "\"template\": true,"
+                + "\"trust_model\": \"default\""
+                + "}";
+        giteaService.createRepo("token 0673f011ed89245efaa3eb76071654183106bc35", json);
+
         dynamoDb.putItem(putRequest(challenge));
         return challenge;
     }
@@ -48,17 +67,7 @@ public class ChallengeService extends AbstractChallengeService {
 
         QueryResponse response = dynamoDb.query(getQueryRequest(language, "LANGUAGE", "GSI1PK", "GSI1SK"));
 
-        for (Map<String, AttributeValue> item : response.items()) {
-            Challenge i = new Challenge();
-            i.setName(item.get("name").s());
-            i.setDescription(item.get("description").s());
-            i.setLanguage(item.get("language").s());
-            i.setDifficulty(item.get("difficulty").s());
-            i.setCreatedBy(item.get("createdBy").s());
-            i.setCreatedAt(item.get("createdAt").s());
-            items.add(i);
-        }
-        return items;
+        return getChallenges(items, response);
     }
 
     public List<Challenge> getByDifficulty (String difficulty){
@@ -66,17 +75,7 @@ public class ChallengeService extends AbstractChallengeService {
 
         QueryResponse response = dynamoDb.query(getQueryRequest(difficulty, "DIFFICULTY", "GSI2PK", "GSI2SK"));
 
-        for (Map<String, AttributeValue> item : response.items()) {
-            Challenge i = new Challenge();
-            i.setName(item.get("name").s());
-            i.setDescription(item.get("description").s());
-            i.setLanguage(item.get("language").s());
-            i.setDifficulty(item.get("difficulty").s());
-            i.setCreatedBy(item.get("createdBy").s());
-            i.setCreatedAt(item.get("createdAt").s());
-            items.add(i);
-        }
-        return items;
+        return getChallenges(items, response);
     }
 
     public List<Challenge> getByCreator (String creator){
@@ -84,6 +83,17 @@ public class ChallengeService extends AbstractChallengeService {
 
         QueryResponse response = dynamoDb.query(getQueryRequest(creator, "CREATOR", "GSI3PK", "GSI3SK"));
 
+        return getChallenges(items, response);
+    }
+
+    public List<Challenge> getBeginsWith (String language){
+        List<Challenge> items = new ArrayList<>();
+
+        QueryResponse response = dynamoDb.query(getBeginsWithRequest(language, "LANGUAGE", "GSI1PK", "GSI1SK"));
+
+        return getChallenges(items, response);
+    }
+    private static List<Challenge> getChallenges(List<Challenge> items, QueryResponse response) {
         for (Map<String, AttributeValue> item : response.items()) {
             Challenge i = new Challenge();
             i.setName(item.get("name").s());

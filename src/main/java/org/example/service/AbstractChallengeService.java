@@ -19,6 +19,7 @@ public abstract class AbstractChallengeService {
     public final static String C_DIFFICULTY = "difficulty";
     public final static String C_LANGUAGE = "language";
     public final static String C_REPOSITORY = "repository";
+    public final static String C_CLONE_REP = "cloneRepository";
     public final static boolean C_PUBLISHED = false;
 
     public String getTableName() {
@@ -75,4 +76,20 @@ public abstract class AbstractChallengeService {
                 .build();
     }
 
+    public QueryRequest getBeginsWithRequest(String attribute, String type, String gsiPk, String gsiSk) {
+        String[] parts = attribute.split("-");
+        String first = parts[0];
+        String second = parts[1];
+
+        Map<String, AttributeValue> tempValues = new HashMap<>();
+        tempValues.put(":" + gsiPk.toLowerCase(), AttributeValue.builder().s("CHALLENGE#".concat(type)).build());
+        tempValues.put(":" + gsiSk.toLowerCase(), AttributeValue.builder().s(first.toUpperCase().concat("#" + second.toUpperCase())).build());
+
+        return QueryRequest.builder()
+                .tableName(getTableName())
+                .indexName(gsiPk.toUpperCase() + "_" + gsiSk.toUpperCase())
+                .keyConditionExpression(gsiPk.toUpperCase() + "= :" + gsiPk.toLowerCase() + " and begins_with(" + gsiSk.toUpperCase() + ", :" + gsiSk.toLowerCase() + ")")
+                .expressionAttributeValues(tempValues)
+                .build();
+    }
 }

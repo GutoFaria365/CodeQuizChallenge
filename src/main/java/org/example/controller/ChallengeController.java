@@ -49,23 +49,13 @@ public class ChallengeController {
     @Path("creator/{creator}")
     public List<Challenge> getByCreator(@PathParam("creator") String creator) { return challengeService.getByCreator(creator); }
 
+    @GET
+    @Path("search/{attribute}")
+    public List<Challenge> getByBeginsGSI1(@PathParam("attribute") String attribute) { return challengeService.getBeginsWith(attribute); }
+
     @POST
     public List<Challenge> add(Challenge challenge) {
         challengeService.add(challenge);
-        String json ="{"
-                + "\"auto_init\": true,"
-                + "\"default_branch\": \"string\","
-                + "\"description\": \"string\","
-                + "\"gitignores\": \"\","
-                + "\"issue_labels\": \"Default\","
-                + "\"license\": \"\","
-                + "\"name\": \"string3\","
-                + "\"private\": true,"
-                + "\"readme\": \"Default\","
-                + "\"template\": true,"
-                + "\"trust_model\": \"default\""
-                + "}";
-        giteaService.createRepo("token 0673f011ed89245efaa3eb76071654183106bc35", json);
         return getAll();
     }
 
