@@ -29,6 +29,11 @@ public class ChallengeService extends AbstractChallengeService {
         return challenge;
     }
 
+    public Challenge patch(Challenge challenge){
+        dynamoDb.updateItem(updateRequest(challenge));
+        return challenge;
+    }
+
     public Challenge getByName(String name) {
         Challenge challengeItem = new Challenge();
         QueryResponse response = dynamoDb.query(getSingleRequest(name));

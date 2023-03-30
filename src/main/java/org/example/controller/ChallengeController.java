@@ -6,10 +6,7 @@ import org.example.service.ChallengeService;
 import org.example.service.GiteaService;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import java.util.List;
 
 @Path("/challenges")
@@ -51,6 +48,14 @@ public class ChallengeController {
     public List<Challenge> add(Challenge challenge) {
         challengeService.add(challenge);
         return getAll();
+    }
+
+    @PATCH
+    @Path("update/{challengeName}")
+    public Challenge patch(@PathParam("challengeName") String challengeName, Challenge challenge) {
+        challenge.setName(challengeName);
+        challengeService.patch(challenge);
+        return challenge;
     }
 
 }
