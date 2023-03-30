@@ -63,6 +63,12 @@ public class ChallengeService extends AbstractChallengeService {
         return challengeMapper.fromChallengeEntityToChallengeDto(challenge);
     }
 
+
+    public Challenge patch(Challenge challenge){
+        dynamoDb.updateItem(updateRequest(challenge));
+        return challenge;
+    }
+
     public ChallengeDto getByName(String name) {
         Challenge challengeItem = new Challenge();
         QueryResponse response = dynamoDb.query(getSingleRequest(name));

@@ -128,4 +128,27 @@ public abstract class AbstractChallengeService {
                 .expressionAttributeValues(tempValues)
                 .build();
     }
+
+    protected UpdateItemRequest updateRequest(Challenge challenge) {
+        Map<String, AttributeValue> key = new HashMap<>();
+        key.put(PK, AttributeValue.builder().s("CHALLENGE#" + challenge.getName().toUpperCase()).build());
+        key.put(SK, AttributeValue.builder().s("CHALLENGE#" + challenge.getName().toUpperCase()).build());
+
+        Map<String, AttributeValueUpdate> updates = new HashMap<>();
+        updates.put(C_NAME, AttributeValueUpdate.builder().value(AttributeValue.builder().s(challenge.getName()).build()).build());
+        updates.put(C_DESCRIPTION, AttributeValueUpdate.builder().value(AttributeValue.builder().s(challenge.getDescription()).build()).build());
+        updates.put(C_LANGUAGE, AttributeValueUpdate.builder().value(AttributeValue.builder().s(challenge.getLanguage()).build()).build());
+        updates.put(C_DIFFICULTY, AttributeValueUpdate.builder().value(AttributeValue.builder().s(challenge.getDifficulty()).build()).build());
+        updates.put(C_CREATED_BY, AttributeValueUpdate.builder().value(AttributeValue.builder().s(challenge.getCreatedBy()).build()).build());
+        updates.put(C_CREATED_AT, AttributeValueUpdate.builder().value(AttributeValue.builder().s(challenge.getCreatedAt()).build()).build());
+        updates.put("GSI1SK", AttributeValueUpdate.builder().value(AttributeValue.builder().s("CHALLENGE#LANGUAGE#" + challenge.getLanguage().toUpperCase()).build()).build());
+        updates.put("GSI2SK", AttributeValueUpdate.builder().value(AttributeValue.builder().s("CHALLENGE#DIFFICULTY#" + challenge.getDifficulty().toUpperCase()).build()).build());
+        updates.put("GSI3SK", AttributeValueUpdate.builder().value(AttributeValue.builder().s("CHALLENGE#CREATOR#" + challenge.getCreatedBy().toUpperCase()).build()).build());
+
+        return UpdateItemRequest.builder()
+                .tableName(getTableName())
+                .key(key)
+                .attributeUpdates(updates)
+                .build();
+    }
 }

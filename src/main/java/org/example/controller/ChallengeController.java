@@ -66,4 +66,12 @@ public class ChallengeController {
         challengeService.deleteChallenge(name);
     }
 
+    @PATCH
+    @Path("update/{challengeName}")
+    public Challenge patch(@PathParam("challengeName") String challengeName, Challenge challenge) {
+        challenge.setName(challengeName);
+        challengeService.patch(challenge);
+        return challenge;
+    }
+
 }
