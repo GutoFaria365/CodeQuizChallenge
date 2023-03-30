@@ -54,14 +54,14 @@ public class ChallengeController {
     public List<ChallengeDto> getByBeginsGSI1(@PathParam("attribute") String attribute) { return challengeService.getBeginsWith(attribute); }
 
     @POST
-    public ChallengeDto add(ChallengeDto challenge) {
+    public ChallengeDto add(ChallengeDto challengeDto) {
 
-        challengeService.add(challenge);
-        return challenge;
+        challengeService.add(challengeDto);
+        return challengeDto;
     }
 
     @DELETE
-    @Path("/{name}")
+    @Path("delete/{name}")
     public void deleteChallenge(@PathParam("name") String name) {
         challengeService.deleteChallenge(name);
     }
