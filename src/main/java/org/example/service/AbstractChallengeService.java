@@ -96,6 +96,21 @@ public abstract class AbstractChallengeService {
                 .expressionAttributeValues(tempValues)
                 .build();
     }
+    public DeleteItemRequest deleteItemRequest(String name){
+        Map<String, AttributeValue> key = new HashMap<>();
+        key.put("PK", AttributeValue.builder()
+                .s("CHALLENGE#".concat(name.toUpperCase()))
+                .build());
+        key.put("SK", AttributeValue.builder()
+                .s("CHALLENGE#".concat(name.toUpperCase()))
+                .build());
+
+        return DeleteItemRequest.builder()
+                .tableName(getTableName())
+                .key(key)
+                .build();
+
+    }
 
     public QueryRequest getBeginsWithRequest(String attribute, String type, String gsiPk, String gsiSk) {
         String[] parts = attribute.split("-");
