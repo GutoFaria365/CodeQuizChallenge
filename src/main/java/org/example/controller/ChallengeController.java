@@ -54,9 +54,11 @@ public class ChallengeController {
     public List<Challenge> getByBeginsGSI1(@PathParam("attribute") String attribute) { return challengeService.getBeginsWith(attribute); }
 
     @POST
-    public List<Challenge> add(Challenge challenge) {
+    public Challenge add(Challenge challenge) {
+
+
         challengeService.add(challenge);
-        return getAll();
+        return challenge;
     }
 
 }

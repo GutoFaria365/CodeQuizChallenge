@@ -15,7 +15,7 @@ public interface GiteaService {
     String getById(@HeaderParam("Authorization") String authorization);
 
     @POST
-    @Path("repos")
+    @Path("user/repos")
     @Consumes(MediaType.APPLICATION_JSON)
     String createRepo(@HeaderParam("Authorization") String authorization, String json);
 }

@@ -12,6 +12,12 @@ public abstract class AbstractChallengeService {
 
     public final static String PK = "PK";
     public final static String SK = "SK";
+    public final static String GSI1PK = "GSI1PK";
+    public final static String GSI1SK = "GSI1SK";
+    public final static String GSI2PK = "GSI2PK";
+    public final static String GSI2SK = "GSI2SK";
+    public final static String GSI3PK = "GSI3PK";
+    public final static String GSI3SK = "GSI3SK";
     public final static String C_NAME = "name";
     public final static String C_DESCRIPTION = "description";
     public final static String C_CREATED_AT = "createdAt";
@@ -20,6 +26,7 @@ public abstract class AbstractChallengeService {
     public final static String C_LANGUAGE = "language";
     public final static String C_REPOSITORY = "repository";
     public final static String C_CLONE_REP = "cloneRepository";
+    public final static String C_OTHER_INFO = "otherInfo";
     public final static boolean C_PUBLISHED = false;
 
     public String getTableName() {
@@ -41,12 +48,26 @@ public abstract class AbstractChallengeService {
         item.put(C_DIFFICULTY, AttributeValue.builder().s(challenge.getDifficulty()).build());
         item.put(C_CREATED_BY, AttributeValue.builder().s(challenge.getCreatedBy()).build());
         item.put(C_CREATED_AT, AttributeValue.builder().s(challenge.getCreatedAt()).build());
-        item.put("GSI1PK", AttributeValue.builder().s("CHALLENGE#LANGUAGE").build());
-        item.put("GSI1SK", AttributeValue.builder().s("CHALLENGE#LANGUAGE#" + challenge.getLanguage().toUpperCase()).build());
-        item.put("GSI2PK", AttributeValue.builder().s("CHALLENGE#DIFFICULTY").build());
-        item.put("GSI2SK", AttributeValue.builder().s("CHALLENGE#DIFFICULTY#" + challenge.getDifficulty().toUpperCase()).build());
-        item.put("GSI3PK", AttributeValue.builder().s("CHALLENGE#CREATOR").build());
-        item.put("GSI3SK", AttributeValue.builder().s("CHALLENGE#CREATOR#" + challenge.getCreatedBy().toUpperCase()).build());
+        item.put(C_REPOSITORY, AttributeValue.builder().s(challenge.getRepository()).build());
+        item.put(C_CLONE_REP, AttributeValue.builder().s(challenge.getCloneRepository()).build());
+        item.put(C_OTHER_INFO, AttributeValue.builder().s(challenge.getOtherInfo()).build());
+        item.put(GSI1PK, AttributeValue.builder().s("CHALLENGE#LANGUAGE").build());
+        item.put(GSI1SK, AttributeValue.builder().s("CHALLENGE#LANGUAGE#" + challenge.getLanguage().toUpperCase()).build());
+        item.put(GSI2PK, AttributeValue.builder().s("CHALLENGE#DIFFICULTY").build());
+        item.put(GSI2SK, AttributeValue.builder().s("CHALLENGE#DIFFICULTY#" + challenge.getDifficulty().toUpperCase()).build());
+        item.put(GSI3PK, AttributeValue.builder().s("CHALLENGE#CREATOR").build());
+        item.put(GSI3SK, AttributeValue.builder().s("CHALLENGE#CREATOR#" + challenge.getCreatedBy().toUpperCase()).build());
+
+        challenge.setPk("CHALLENGE#" + challenge.getName().toUpperCase());
+        challenge.setSk("CHALLENGE#" + challenge.getName().toUpperCase());
+        challenge.setGsi1pk("CHALLENGE#LANGUAGE");
+        challenge.setGsi1sk("CHALLENGE#LANGUAGE#" + challenge.getLanguage().toUpperCase());
+        challenge.setGsi2pk("CHALLENGE#DIFFICULTY");
+        challenge.setGsi2sk("CHALLENGE#DIFFICULTY#" + challenge.getDifficulty().toUpperCase());
+        challenge.setGsi3pk("CHALLENGE#CREATOR");
+        challenge.setGsi3sk("CHALLENGE#CREATOR#" + challenge.getCreatedBy().toUpperCase());
+
+
         return PutItemRequest.builder()
                 .tableName(getTableName())
                 .item(item)
