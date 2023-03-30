@@ -1,5 +1,7 @@
 package org.example.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.example.JsonUtils;
 import org.example.controller.GiteaService;
@@ -67,6 +69,14 @@ public class ChallengeService extends AbstractChallengeService {
         String url;
         String cloneUrl;
         String jsonString = giteaService.createRepo("token 0673f011ed89245efaa3eb76071654183106bc35", json);
+
+//        Repo repo;
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        try {
+//            repo = objectMapper.readValue(json, Repo.class);
+//        } catch (JsonProcessingException e) {
+//            throw new RuntimeException(e);
+//        }
 
 //        JsonUtils<Repo> jsonUtils = new JsonUtils<>(Repo.class);
 //        Repo jsonObject = jsonUtils.fromJson(jsonString);

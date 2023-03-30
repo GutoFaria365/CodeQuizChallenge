@@ -4,10 +4,6 @@ public class Repo {
     private String html_url;
     private String clone_url;
 
-    public Repo (String url, String cloneUrl) {
-        this.html_url = url;
-        this.clone_url = cloneUrl;
-    }
 
     public String getHtml_url() {
         return html_url;
