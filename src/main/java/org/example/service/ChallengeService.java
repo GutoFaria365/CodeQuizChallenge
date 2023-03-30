@@ -43,20 +43,20 @@ public class ChallengeService extends AbstractChallengeService {
     }
 
     public ChallengeDto add(ChallengeDto challengeDto) {
-        //        String json ="{"
-//                + "\"auto_init\": true,"
-//                + "\"default_branch\": \"string\","
-//                + "\"description\": \"" + challenge.getDescription() + "\","
-//                + "\"gitignores\": \"\","
-//                + "\"issue_labels\": \"Default\","
-//                + "\"license\": \"\","
-//                + "\"name\": \"" + challenge.getName() + "\","
-//                + "\"private\": true,"
-//                + "\"readme\": \"Default\","
-//                + "\"template\": true,"
-//                + "\"trust_model\": \"default\""
-//                + "}";
-//        giteaService.createRepo("token 0673f011ed89245efaa3eb76071654183106bc35", json);
+             String json ="{"
+                + "\"auto_init\": true,"
+                + "\"default_branch\": \"string\","
+                + "\"description\": \"" + challengeDto.getDescription() + "\","
+                + "\"gitignores\": \"\","
+                + "\"issue_labels\": \"Default\","
+                + "\"license\": \"\","
+                + "\"name\": \"" + challengeDto.getName() + "\","
+                + "\"private\": true,"
+                + "\"readme\": \"Default\","
+                + "\"template\": true,"
+                + "\"trust_model\": \"default\""
+                + "}";
+        giteaService.createRepo("token 0673f011ed89245efaa3eb76071654183106bc35", json);
 
         Challenge challenge = challengeMapper.fromChallengeDtoToChallengeEntity(challengeDto);
         dynamoDb.putItem(putRequest(challenge));
@@ -161,6 +161,7 @@ public class ChallengeService extends AbstractChallengeService {
 
     public void deleteChallenge (String name) {
         dynamoDb.deleteItem(deleteItemRequest(name));
+        giteaService.deleteRepo("token 0673f011ed89245efaa3eb76071654183106bc35", "root", name);
 
     }
 
