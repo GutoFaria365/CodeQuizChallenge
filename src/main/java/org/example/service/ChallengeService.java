@@ -5,6 +5,7 @@ import org.example.mapper.ChallengeMapper;
 import org.example.model.Challenge;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
+import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryResponse;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -114,4 +115,12 @@ public class ChallengeService extends AbstractChallengeService {
                 .map(challengeMapper::fromChallengeEntityToChallengeDto)
                 .collect(Collectors.toList());
     }
+
+
+
+    public void deleteChallenge (String name) {
+        dynamoDb.deleteItem(deleteItemRequest(name));
+
+    }
+
 }

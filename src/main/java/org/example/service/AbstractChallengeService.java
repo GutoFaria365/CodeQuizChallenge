@@ -75,5 +75,20 @@ public abstract class AbstractChallengeService {
                 .build();
         return queryRequest;
     }
+    public DeleteItemRequest deleteItemRequest(String name){
+        Map<String, AttributeValue> key = new HashMap<>();
+        key.put("PK", AttributeValue.builder()
+                .s("CHALLENGE#".concat(name.toUpperCase()))
+                .build());
+        key.put("SK", AttributeValue.builder()
+                .s("CHALLENGE#".concat(name.toUpperCase()))
+                .build());
+
+        return DeleteItemRequest.builder()
+                .tableName(getTableName())
+                .key(key)
+                .build();
+
+    }
 
 }

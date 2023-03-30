@@ -7,10 +7,7 @@ import org.example.service.ChallengeService;
 import org.example.service.GiteaService;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import java.util.List;
 
 @Path("/challenges")
@@ -52,6 +49,12 @@ public class ChallengeController {
     public ChallengeDto add(ChallengeDto challengeDto) {
         challengeService.add(challengeDto);
         return challengeDto;
+    }
+
+    @DELETE
+    @Path("/{name}")
+    public void deleteChallenge(@PathParam("name") String name) {
+        challengeService.deleteChallenge(name);
     }
 
 }
