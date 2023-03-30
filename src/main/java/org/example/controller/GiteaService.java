@@ -6,11 +6,12 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-@Path("/api/v1/user")
+@Path("/api/v1")
 @RegisterRestClient
 public interface GiteaService {
 
     @GET
+    @Path("user")
     String getById(@HeaderParam("Authorization") String authorization);
 
     @POST
