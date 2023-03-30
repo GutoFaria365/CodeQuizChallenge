@@ -4,7 +4,7 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.example.dto.ChallengeDto;
 import org.example.model.Challenge;
 import org.example.service.ChallengeService;
-import org.example.service.GiteaService;
+import org.example.controller.GiteaService;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -15,15 +15,19 @@ public class ChallengeController {
 
     @Inject
     ChallengeService challengeService;
-//    @RestClient
-//    GiteaService giteaService;
+    @RestClient
+    GiteaService giteaService;
 
-//    @GET
-//    @Path("/user")
-//    public String getUser(){
-//        return giteaService.getById("token 0673f011ed89245efaa3eb76071654183106bc35");
-//    }
-
+    @GET
+    @Path("/user")
+    public String getUser(){
+        return giteaService.getById("token 0673f011ed89245efaa3eb76071654183106bc35");
+    }
+    @POST
+    @Path("/user/repos")
+    public String createRepo(String json){
+        return giteaService.createRepo("token 0673f011ed89245efaa3eb76071654183106bc35", json);
+    }
     @GET
     public List<ChallengeDto> getAll() {
         return challengeService.findAll();
@@ -45,10 +49,15 @@ public class ChallengeController {
     @Path("creator/{creator}")
     public List<ChallengeDto> getByCreator(@PathParam("creator") String creator) { return challengeService.getByCreator(creator); }
 
+    @GET
+    @Path("search/{attribute}")
+    public List<ChallengeDto> getByBeginsGSI1(@PathParam("attribute") String attribute) { return challengeService.getBeginsWith(attribute); }
+
     @POST
-    public ChallengeDto add(ChallengeDto challengeDto) {
-        challengeService.add(challengeDto);
-        return challengeDto;
+    public ChallengeDto add(ChallengeDto challenge) {
+
+        challengeService.add(challenge);
+        return challenge;
     }
 
     @DELETE

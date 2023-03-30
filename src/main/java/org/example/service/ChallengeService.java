@@ -1,5 +1,7 @@
 package org.example.service;
 
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.example.controller.GiteaService;
 import org.example.dto.ChallengeDto;
 import org.example.mapper.ChallengeMapper;
 import org.example.model.Challenge;
@@ -21,7 +23,11 @@ public class ChallengeService extends AbstractChallengeService {
     @Inject
     DynamoDbClient dynamoDb;
 
+    @Inject
     ChallengeMapper challengeMapper;
+
+    @RestClient
+    GiteaService giteaService;
 
     public ChallengeService(ChallengeMapper challengeMapper) {
         this.challengeMapper = challengeMapper;
@@ -37,6 +43,21 @@ public class ChallengeService extends AbstractChallengeService {
     }
 
     public ChallengeDto add(ChallengeDto challengeDto) {
+        //        String json ="{"
+//                + "\"auto_init\": true,"
+//                + "\"default_branch\": \"string\","
+//                + "\"description\": \"" + challenge.getDescription() + "\","
+//                + "\"gitignores\": \"\","
+//                + "\"issue_labels\": \"Default\","
+//                + "\"license\": \"\","
+//                + "\"name\": \"" + challenge.getName() + "\","
+//                + "\"private\": true,"
+//                + "\"readme\": \"Default\","
+//                + "\"template\": true,"
+//                + "\"trust_model\": \"default\""
+//                + "}";
+//        giteaService.createRepo("token 0673f011ed89245efaa3eb76071654183106bc35", json);
+
         Challenge challenge = challengeMapper.fromChallengeDtoToChallengeEntity(challengeDto);
         dynamoDb.putItem(putRequest(challenge));
         return challengeMapper.fromChallengeEntityToChallengeDto(challenge);
@@ -46,12 +67,23 @@ public class ChallengeService extends AbstractChallengeService {
         Challenge challengeItem = new Challenge();
         QueryResponse response = dynamoDb.query(getSingleRequest(name));
         for (Map<String, AttributeValue> item : response.items()) {
+            challengeItem.setPk(item.get("PK").s());
+            challengeItem.setSk(item.get("SK").s());
             challengeItem.setName(item.get("name").s());
             challengeItem.setDescription(item.get("description").s());
             challengeItem.setLanguage(item.get("language").s());
             challengeItem.setDifficulty(item.get("difficulty").s());
             challengeItem.setCreatedBy(item.get("createdBy").s());
             challengeItem.setCreatedAt(item.get("createdAt").s());
+            challengeItem.setRepository(item.get("repository").s());
+            challengeItem.setCloneRepository(item.get("cloneRepository").s());
+            challengeItem.setOtherInfo(item.get("otherInfo").s());
+            challengeItem.setGsi1pk(item.get("GSI1PK").s());
+            challengeItem.setGsi1sk(item.get("GSI1SK").s());
+            challengeItem.setGsi2pk(item.get("GSI2PK").s());
+            challengeItem.setGsi2sk(item.get("GSI2SK").s());
+            challengeItem.setGsi3pk(item.get("GSI3PK").s());
+            challengeItem.setGsi3sk(item.get("GSI3SK").s());
         }
         return challengeMapper.fromChallengeEntityToChallengeDto(challengeItem);
     }
@@ -61,16 +93,7 @@ public class ChallengeService extends AbstractChallengeService {
 
         QueryResponse response = dynamoDb.query(getQueryRequest(language, "LANGUAGE", "GSI1PK", "GSI1SK"));
 
-        for (Map<String, AttributeValue> item : response.items()) {
-            Challenge i = new Challenge();
-            i.setName(item.get("name").s());
-            i.setDescription(item.get("description").s());
-            i.setLanguage(item.get("language").s());
-            i.setDifficulty(item.get("difficulty").s());
-            i.setCreatedBy(item.get("createdBy").s());
-            i.setCreatedAt(item.get("createdAt").s());
-            items.add(i);
-        }
+        getChallenges(items, response);
         return items.stream()
                 .map(challengeMapper::fromChallengeEntityToChallengeDto)
                 .collect(Collectors.toList());
@@ -81,16 +104,7 @@ public class ChallengeService extends AbstractChallengeService {
 
         QueryResponse response = dynamoDb.query(getQueryRequest(difficulty, "DIFFICULTY", "GSI2PK", "GSI2SK"));
 
-        for (Map<String, AttributeValue> item : response.items()) {
-            Challenge i = new Challenge();
-            i.setName(item.get("name").s());
-            i.setDescription(item.get("description").s());
-            i.setLanguage(item.get("language").s());
-            i.setDifficulty(item.get("difficulty").s());
-            i.setCreatedBy(item.get("createdBy").s());
-            i.setCreatedAt(item.get("createdAt").s());
-            items.add(i);
-        }
+        getChallenges(items, response);
         return items.stream()
                 .map(challengeMapper::fromChallengeEntityToChallengeDto)
                 .collect(Collectors.toList());
@@ -101,22 +115,43 @@ public class ChallengeService extends AbstractChallengeService {
 
         QueryResponse response = dynamoDb.query(getQueryRequest(creator, "CREATOR", "GSI3PK", "GSI3SK"));
 
+        getChallenges(items, response);
+        return items.stream()
+                .map(challengeMapper::fromChallengeEntityToChallengeDto)
+                .collect(Collectors.toList());
+    }
+    public List<ChallengeDto> getBeginsWith (String language){
+        List<Challenge> items = new ArrayList<>();
+
+        QueryResponse response = dynamoDb.query(getBeginsWithRequest(language, "LANGUAGE", "GSI1PK", "GSI1SK"));
+        getChallenges(items, response);
+        return items.stream()
+                .map(challengeMapper::fromChallengeEntityToChallengeDto)
+                .collect(Collectors.toList());
+    }
+    private static void getChallenges(List<Challenge> items, QueryResponse response) {
         for (Map<String, AttributeValue> item : response.items()) {
             Challenge i = new Challenge();
+            i.setPk(item.get("PK").s());
+            i.setSk(item.get("SK").s());
             i.setName(item.get("name").s());
             i.setDescription(item.get("description").s());
             i.setLanguage(item.get("language").s());
             i.setDifficulty(item.get("difficulty").s());
             i.setCreatedBy(item.get("createdBy").s());
             i.setCreatedAt(item.get("createdAt").s());
+            i.setRepository(item.get("repository").s());
+            i.setCloneRepository(item.get("cloneRepository").s());
+            i.setOtherInfo(item.get("otherInfo").s());
+            i.setGsi1pk(item.get("GSI1PK").s());
+            i.setGsi1sk(item.get("GSI1SK").s());
+            i.setGsi2pk(item.get("GSI2PK").s());
+            i.setGsi2sk(item.get("GSI2SK").s());
+            i.setGsi3pk(item.get("GSI3PK").s());
+            i.setGsi3sk(item.get("GSI3SK").s());
             items.add(i);
         }
-        return items.stream()
-                .map(challengeMapper::fromChallengeEntityToChallengeDto)
-                .collect(Collectors.toList());
     }
-
-
 
     public void deleteChallenge (String name) {
         dynamoDb.deleteItem(deleteItemRequest(name));
