@@ -5,6 +5,7 @@ import org.example.dto.ChallengeDto;
 import org.example.model.Challenge;
 import org.example.service.ChallengeService;
 import org.example.controller.GiteaService;
+import org.example.utils.Messages;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -28,6 +29,14 @@ public class ChallengeController {
     public String createRepo(String json){
         return giteaService.createRepo("token 0673f011ed89245efaa3eb76071654183106bc35", json);
     }
+
+    @POST
+    @Path("/repos/{owner}/{repo}/forks")
+    public String createFork(String json, @PathParam("owner") String owner, @PathParam("repo") String repo) {
+
+        return giteaService.createFork("token 0673f011ed89245efaa3eb76071654183106bc35",json,owner,repo);
+    }
+
     @GET
     public List<ChallengeDto> getAll() {
         return challengeService.findAll();
@@ -61,9 +70,10 @@ public class ChallengeController {
     }
 
     @DELETE
-    @Path("delete/{name}")
-    public void deleteChallenge(@PathParam("name") String name) {
+    @Path("/delete/{name}")
+    public String deleteChallenge(@PathParam("name") String name) {
         challengeService.deleteChallenge(name);
+        return Messages.CHAL_DELETED;
     }
 
     @PATCH

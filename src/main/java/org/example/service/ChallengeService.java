@@ -203,6 +203,7 @@ public class ChallengeService extends AbstractChallengeService {
 
     public void deleteChallenge (String name) {
         dynamoDb.deleteItem(deleteItemRequest(name));
+        giteaService.deleteRepo("token 0673f011ed89245efaa3eb76071654183106bc35", "root", name);
 
     }
 
