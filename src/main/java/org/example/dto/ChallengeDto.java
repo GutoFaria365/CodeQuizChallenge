@@ -16,7 +16,7 @@ public class ChallengeDto {
     private String createdBy;
     private String repository;
     private String cloneRepository;
-    private String otherInfo;
+//    private String otherInfo;
 
     private String pk;
     private String sk;
@@ -93,13 +93,13 @@ public class ChallengeDto {
         this.cloneRepository = cloneRepository;
     }
 
-    public String getOtherInfo() {
-        return otherInfo;
-    }
-
-    public void setOtherInfo(String otherInfo) {
-        this.otherInfo = otherInfo;
-    }
+//    public String getOtherInfo() {
+//        return otherInfo;
+//    }
+//
+//    public void setOtherInfo(String otherInfo) {
+//        this.otherInfo = otherInfo;
+//    }
 
     public String getPk() {
         return pk;

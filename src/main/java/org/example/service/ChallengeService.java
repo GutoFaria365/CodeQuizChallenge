@@ -1,14 +1,20 @@
 package org.example.service;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.example.JsonUtils;
 import org.example.controller.GiteaService;
 import org.example.dto.ChallengeDto;
 import org.example.mapper.ChallengeMapper;
 import org.example.model.Challenge;
+import org.example.model.Repo;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryResponse;
+import software.amazon.awssdk.thirdparty.jackson.core.JsonParser;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -29,6 +35,7 @@ public class ChallengeService extends AbstractChallengeService {
     @RestClient
     GiteaService giteaService;
 
+
     public ChallengeService(ChallengeMapper challengeMapper) {
         this.challengeMapper = challengeMapper;
     }
@@ -43,22 +50,47 @@ public class ChallengeService extends AbstractChallengeService {
     }
 
     public ChallengeDto add(ChallengeDto challengeDto) {
-        //        String json ="{"
-//                + "\"auto_init\": true,"
-//                + "\"default_branch\": \"string\","
-//                + "\"description\": \"" + challenge.getDescription() + "\","
-//                + "\"gitignores\": \"\","
-//                + "\"issue_labels\": \"Default\","
-//                + "\"license\": \"\","
-//                + "\"name\": \"" + challenge.getName() + "\","
-//                + "\"private\": true,"
-//                + "\"readme\": \"Default\","
-//                + "\"template\": true,"
-//                + "\"trust_model\": \"default\""
-//                + "}";
-//        giteaService.createRepo("token 0673f011ed89245efaa3eb76071654183106bc35", json);
+        String json = "{"
+                + "\"auto_init\": true,"
+                + "\"default_branch\": \"string\","
+                + "\"description\": \"" + challengeDto.getDescription() + "\","
+                + "\"gitignores\": \"\","
+                + "\"issue_labels\": \"Default\","
+                + "\"license\": \"\","
+                + "\"name\": \"" + challengeDto.getName() + "\","
+                + "\"private\": true,"
+                + "\"readme\": \"Default\","
+                + "\"template\": true,"
+                + "\"trust_model\": \"default\""
+                + "}";
+
+        String url;
+        String cloneUrl;
+        String jsonString = giteaService.createRepo("token 0673f011ed89245efaa3eb76071654183106bc35", json);
+
+//        JsonUtils<Repo> jsonUtils = new JsonUtils<>(Repo.class);
+//        Repo jsonObject = jsonUtils.fromJson(jsonString);
+//
+//        url = (String) jsonObject.getHtml_url();
+//        cloneUrl = (String) jsonObject.getClone_url();
+
+        try {
+            JSONParser parser = new JSONParser();
+
+            JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
+            url = (String) jsonObject.get("html_url");
+            cloneUrl = (String) jsonObject.get("clone_url");
+
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
 
         Challenge challenge = challengeMapper.fromChallengeDtoToChallengeEntity(challengeDto);
+        challenge.setRepository(url);
+        challenge.setCloneRepository(cloneUrl);
+        challenge.setOtherInfo(jsonString);
+
+
         dynamoDb.putItem(putRequest(challenge));
         return challengeMapper.fromChallengeEntityToChallengeDto(challenge);
     }
