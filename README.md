@@ -7,9 +7,10 @@
 
 ### Project description
 
-[TO EDIT]
+[EDITED]
 
-The scope of the projet was ... (smth. explaining which part we did, what it included, in the end what we learnt (like using AWS, Dynamo, Quarkus, etc.))
+The scope of the projet was, using Quarkus, to create an access point that would allow teachers to create coding challenges, and for students to access such challenges and solve them. The access point is connected to a noSQL database (namely DynamoDb), where the info of both teaechers and studenst alike is stored, as well as the challenges designed by the former and solutions proposed by the latter. This access point will later be joined with an ongoing platform AWS based currently being developed.
+
 
 [EXAMPLE FROM CHRISTOPHER´S SIMPLE JAVA SPINGBOOT APPLICATION REPO (later on I'll call "example" refering to this example)]:
 
@@ -34,8 +35,14 @@ Explain to people what they need to have in order setup the project.
 [EXAMPLE]
 
 - Clone the repository
-- Install Java 11
+- Install Java 17
 - Install Maven
+- Install Docker Desktop
+- Setup the container using the following commands:
+    ```
+    docker pull amazon/dynamodb-local
+    docker run --publish 4566:8000 amazon/dynamodb-local:1.19.0 -jar DynamoDBLocal.jar -inMemory -sharedDb
+    ```
 - Build the project using the following command:
 
     ```
@@ -49,11 +56,11 @@ Explain to people what they need to have in order setup the project.
 
 ### Usage
 
-[EXAMPLE]
+[EDITED]
 
 Once the application is up and running, you can access the API at the following URL:
 
-    http://localhost:8080/api/v1
+    http://localhost:8080/q/swagger-ui/
 
 The API has the following endpoints:
 
@@ -61,16 +68,14 @@ The API has the following endpoints:
 - GET /hello-list: returns a simple hello message in a JSON List
 
 
-- GET /students: returns a list of students
-- GET /students/{id}: returns a student with the given id
-- POST /students: adds a new student to the list
-- PUT /students/{id}: updates a student with the given id
-- DELETE /students/{id}: deletes a student with the given id
-
-- GET /calculator/{num1}/{num2}: returns the sum of the num1 and num2
-  
+- GET /challenges: returns a list of stored challenges
+- GET /challenges/creator/{creator}: returns a challenge with the given creator
+- GET /challenges/difficulty/{difficulty}: returns a challenge with the given difficulty
+- GET /challenges/language/{language}: returns a challenge with the given language
+- GET /challenges/name/{name}: returns a challenge with the given name  
+- POST /challenges: adds a new challenge to the database
+- PATCH /challenges/update/{challengeName}: updates a challenge with the given name
+-   
 [NOTE]
 
 In the applications.properties file Christpher also has some comments-explanations. Look into it and see if there is smth. relevant to add to our project https://github.com/csoares/StudentJavaSpringboot/blob/master/src/main/resources/application.properties[https://github.com/csoares/StudentJavaSpringboot/blob/master/src/main/resources/application.properties]
-
-
