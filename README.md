@@ -7,32 +7,11 @@
 
 ### Project description
 
-[EDITED]
-
 The scope of the projet was, using Quarkus, to create an access point that would allow teachers to create coding challenges, and for students to access such challenges and solve them. The access point is connected to a noSQL database (namely DynamoDb), where the info of both teaechers and studenst alike is stored, as well as the challenges designed by the former and solutions proposed by the latter. This access point will later be joined with an ongoing platform AWS based currently being developed.
-
-
-[EXAMPLE FROM CHRISTOPHER´S SIMPLE JAVA SPINGBOOT APPLICATION REPO (later on I'll call "example" refering to this example)]:
-
-```
-This is a simple Java SpringBoot API that 
-serves as a template for building RESTful APIs 
-using SpringBoot framework. 
-In this first application, 
-we will not cover the security aspect of the API, 
-but we will cover the basic topics, such as:
-controller, service, repository, and model.
-```
-
-
 
 ### Installation
 
-[TO EDIT]
-
-Explain to people what they need to have in order setup the project.
-
-[EXAMPLE]
+You will need to:
 
 - Clone the repository
 - Install Java 17
@@ -56,8 +35,6 @@ Explain to people what they need to have in order setup the project.
 
 ### Usage
 
-[EDITED]
-
 Once the application is up and running, you can access the API at the following URL:
 
     http://localhost:8080/q/swagger-ui/
@@ -69,13 +46,18 @@ The API has the following endpoints:
 
 
 - GET /challenges: returns a list of stored challenges
+- POST /challenges: adds a new challenge to the database
 - GET /challenges/creator/{creator}: returns a challenge with the given creator
+- DELETE /challenges/delete/{name}: deletes a challenge from the database with the given name
 - GET /challenges/difficulty/{difficulty}: returns a challenge with the given difficulty
 - GET /challenges/language/{language}: returns a challenge with the given language
 - GET /challenges/name/{name}: returns a challenge with the given name  
-- POST /challenges: adds a new challenge to the database
-- PATCH /challenges/update/{challengeName}: updates a challenge with the given name
--   
+- POST /challenges/repos/{owner}/{repo}/forks: creates a fork of a given challenge for a given user
+- GET /challenges/search/{attribute}: returns a challenge with the given attribute
+- PATCH /challenges/update/{challengeName}: edits a given challenge (the challenge name cannot be changed since it's used as a partition key
+- GET /challenges/user: returns a given user
+- POST /challenges/user/repos: allows a user to post a new repository
+
 [NOTE]
 
 In the applications.properties file Christpher also has some comments-explanations. Look into it and see if there is smth. relevant to add to our project https://github.com/csoares/StudentJavaSpringboot/blob/master/src/main/resources/application.properties[https://github.com/csoares/StudentJavaSpringboot/blob/master/src/main/resources/application.properties]
