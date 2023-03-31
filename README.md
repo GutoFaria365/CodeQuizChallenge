@@ -41,10 +41,6 @@ Once the application is up and running, you can access the API at the following 
 
 The API has the following endpoints:
 
-- GET /hello: returns a simple hello message
-- GET /hello-list: returns a simple hello message in a JSON List
-
-
 - GET /challenges: returns a list of stored challenges
 - POST /challenges: adds a new challenge to the database
 - GET /challenges/creator/{creator}: returns a challenge with the given creator
