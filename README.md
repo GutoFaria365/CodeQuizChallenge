@@ -30,7 +30,7 @@ You will need to:
 - Run the application using the following command:
 
     ```
-    mvn spring-boot:run
+    mvn quarkus:dev
     ```
 
 ### Usage
