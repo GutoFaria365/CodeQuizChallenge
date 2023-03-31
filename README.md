@@ -57,7 +57,3 @@ The API has the following endpoints:
 - PATCH /challenges/update/{challengeName}: edits a given challenge (the challenge name cannot be changed since it's used as a partition key
 - GET /challenges/user: returns a given user
 - POST /challenges/user/repos: allows a user to post a new repository
-
-[NOTE]
-
-In the applications.properties file Christpher also has some comments-explanations. Look into it and see if there is smth. relevant to add to our project https://github.com/csoares/StudentJavaSpringboot/blob/master/src/main/resources/application.properties[https://github.com/csoares/StudentJavaSpringboot/blob/master/src/main/resources/application.properties]
