@@ -4,10 +4,12 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.example.service.AbstractChallengeService;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.util.Map;
 import java.util.Objects;
 
 @RegisterForReflection
+@ApplicationScoped
 public class Challenge {
 
     private String name;

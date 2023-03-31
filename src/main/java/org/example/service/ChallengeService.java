@@ -1,22 +1,16 @@
 package org.example.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.example.JsonUtils;
 import org.example.controller.GiteaService;
 import org.example.dto.ChallengeDto;
 import org.example.mapper.ChallengeMapper;
 import org.example.model.Challenge;
-import org.example.model.Repo;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryResponse;
-import software.amazon.awssdk.thirdparty.jackson.core.JsonParser;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
